@@ -1,0 +1,40 @@
+﻿@import "tailwindcss";
+
+@theme inline {
+  --color-backdrop: #120E0F;
+  --color-surface: #1C1416;
+  --color-surface2: #241A1D;
+  --color-brandred: #E2241A;
+  --color-branddark: #7A1113;
+  --color-gold: #E8B34C;
+  --color-cream: #F2E8DD;
+  --color-paper: #F6E6B4;
+  --color-muted: #9C8A82;
+
+  --font-display: var(--font-bebas), sans-serif;
+  --font-body: var(--font-fraunces), serif;
+  --font-mono: var(--font-jetbrains), monospace;
+}
+
+body {
+  background: var(--color-backdrop);
+  color: var(--color-cream);
+  font-family: var(--font-body);
+}
+
+@keyframes flicker {
+  0%, 19%, 21%, 100% { opacity: 1; }
+  20% { opacity: 0.25; }
+}
+
+.animate-flicker {
+  animation: flicker 2.4s infinite ease-in-out;
+}
+@keyframes scroll-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-scroll {
+  animation: scroll-left 26s linear infinite;
+}
