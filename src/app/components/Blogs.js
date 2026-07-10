@@ -1,28 +1,30 @@
 ﻿import BlogEntry from "./BlogEntry";
 
-export default function Blogs() {
-  const entries = [
-    {
-      date: "JUL 08 - PERSONAL TAKE",
-      title: "I watched Monsoon Diaries twice. Here's what changed.",
-      excerpt: "The first watch, I was annoyed by the pacing. The second, I realised that was the point.",
+async function getPosts() {
+  try {
+    const res = await fetch(process.env.STRAPI_URL + "/api/posts?populate=*", {
+    headers: {
+      Authorization: "Bearer " + process.env.STRAPI_API_TOKEN,
     },
-    {
-      date: "JUL 06 - HOT TAKE",
-      title: "Trailers are lying to us again, and we keep falling for it",
-      excerpt: "A short rant on the state of trailer-cutting, and the one recent exception that respected the audience.",
-    },
-    {
-      date: "JUL 02 - LISTICLE",
-      title: "Five character actors who deserve a lead role this year",
-      excerpt: "They've been stealing every scene for years. It's time somebody wrote them the whole film.",
-    },
-    {
-      date: "JUN 29 - DIARY",
-      title: "What a 6am press screening actually feels like",
-      excerpt: "Cold coffee, colder theatre, and the strange privilege of watching a film before anyone tells you what to think.",
-    },
-  ];
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    return [];
+  }
+
+  const json = await res.json();
+  return json.data;
+  } catch (e) {
+    return [];
+  }
+}
+
+export default async function Blogs() {
+  const posts = await getPosts();
+  const blogs = posts.filter(function (p) {
+    return p.category === "Blog";
+  });
 
   return (
     <section id="blogs" className="px-8 md:px-16 py-24">
@@ -38,11 +40,23 @@ export default function Blogs() {
         </a>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
-        {entries.map(function (e, i) {
-          return <BlogEntry key={i} {...e} />;
-        })}
-      </div>
+      {blogs.length === 0 ? (
+        <p className="font-mono text-sm text-muted">No blog posts published yet.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
+          {blogs.map(function (b, i) {
+            return (
+              <BlogEntry
+                key={i}
+                date={b.kicker ? b.kicker.toUpperCase() : ""}
+                title={b.title}
+                excerpt={b.excerpt}
+              />
+            );
+          })}
+        </div>
+      )}
     </section>
   );
 }
+

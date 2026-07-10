@@ -1,32 +1,27 @@
 ﻿import ReviewCard from "./ReviewCard";
 
-export default function Reviews() {
-  const reviews = [
-    {
-      genre: "DRAMA",
-      duration: "2H 18M",
-      title: "Monsoon Diaries",
-      excerpt: "A slow-burn family drama that trusts silence more than dialogue - and mostly earns it.",
-      rating: "4 out of 5 stars",
-      author: "R. NAIR",
-    },
-    {
-      genre: "ACTION",
-      duration: "2H 41M",
-      title: "Ember Road",
-      excerpt: "All spectacle, thin script - but the chase through the salt flats alone is worth a ticket.",
-      rating: "3 out of 5 stars",
-      author: "A. MENON",
-    },
-    {
-      genre: "THRILLER",
-      duration: "2H 05M",
-      title: "Kaalpurush",
-      excerpt: "A twisty, atmospheric noir that finally gives its lead actress a role worth her talent.",
-      rating: "5 out of 5 stars",
-      author: "S. IYER",
-    },
-  ];
+async function getReviews() {
+  try {
+    const res = await fetch(process.env.STRAPI_URL + "/api/reviews?populate=*", {
+      headers: {
+        Authorization: "Bearer " + process.env.STRAPI_API_TOKEN,
+      },
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      return [];
+    }
+
+    const json = await res.json();
+    return json.data;
+  } catch (e) {
+    return [];
+  }
+}
+
+export default async function Reviews() {
+  const reviews = await getReviews();
 
   return (
     <section id="reviews" className="px-8 md:px-16 py-24">
@@ -42,11 +37,25 @@ export default function Reviews() {
         </a>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {reviews.map(function (r, i) {
-          return <ReviewCard key={i} {...r} />;
-        })}
-      </div>
+      {reviews.length === 0 ? (
+        <p className="font-mono text-sm text-muted">No reviews published yet.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {reviews.map(function (r, i) {
+            return (
+              <ReviewCard
+                key={i}
+                genre={r.genre}
+                duration={r.duration}
+                title={r.title}
+                excerpt={r.excerpt}
+                rating={r.rating + " out of 5 stars"}
+                author={r.author}
+              />
+            );
+          })}
+        </div>
+      )}
     </section>
   );
 }

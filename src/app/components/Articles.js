@@ -1,32 +1,30 @@
 ﻿import ArticleCard from "./ArticleCard";
 
-export default function Articles() {
-  const articles = [
-    {
-      tag: "FEATURE - 01",
-      kicker: "Industry",
-      title: "Why South Indian Cinema Keeps Winning the Pan-India Race",
-      excerpt: "Budgets are still smaller. So why do these films keep outperforming at the national box office?",
-      meta: "12 MIN READ - BY R. NAIR",
-      featured: true,
+async function getPosts() {
+  try {
+    const res = await fetch(process.env.STRAPI_URL + "/api/posts?populate=*", {
+    headers: {
+      Authorization: "Bearer " + process.env.STRAPI_API_TOKEN,
     },
-    {
-      tag: "FEATURE - 02",
-      kicker: "Deep Dive",
-      title: "The Second Act Problem",
-      excerpt: "A running theme across this year's biggest releases: strong openings, sagging middles.",
-      meta: "8 MIN READ - BY A. MENON",
-      featured: false,
-    },
-    {
-      tag: "FEATURE - 03",
-      kicker: "Retrospective",
-      title: "The Soundtrack Decade",
-      excerpt: "How background scores quietly became the most-discussed part of a film's release.",
-      meta: "10 MIN READ - BY S. IYER",
-      featured: false,
-    },
-  ];
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    return [];
+  }
+
+  const json = await res.json();
+  return json.data;
+  } catch (e) {
+    return [];
+  }
+}
+
+export default async function Articles() {
+  const posts = await getPosts();
+  const articles = posts.filter(function (p) {
+    return p.category === "Article";
+  });
 
   return (
     <section id="articles" className="px-8 md:px-16 py-24 bg-paper border-y border-black/10">
@@ -42,11 +40,26 @@ export default function Articles() {
         </a>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-        {articles.map(function (a, i) {
-          return <ArticleCard key={i} {...a} />;
-        })}
-      </div>
+      {articles.length === 0 ? (
+        <p className="font-mono text-sm text-[#1C1416]/60">No articles published yet.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          {articles.map(function (a, i) {
+            return (
+              <ArticleCard
+                key={i}
+                tag={a.kicker ? a.kicker.toUpperCase() : "FEATURE"}
+                kicker={a.kicker}
+                title={a.title}
+                excerpt={a.excerpt}
+                meta={(a.readTime || "") + " - BY " + (a.author || "")}
+                featured={a.featured}
+              />
+            );
+          })}
+        </div>
+      )}
     </section>
   );
 }
+
