@@ -45,6 +45,7 @@ export default async function Reviews() {
             return (
               <ReviewCard
                 key={i}
+                slug={r.slug}
                 genre={r.genre}
                 duration={r.duration}
                 title={r.title}
