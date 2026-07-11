@@ -1,9 +1,62 @@
-﻿export default function Gallery() {
-  const categories = [
-    { name: "Actors", tiles: ["Coming Soon", "Coming Soon", "Coming Soon", "Coming Soon"] },
-    { name: "Actresses", tiles: ["Coming Soon", "Coming Soon", "Coming Soon", "Coming Soon"] },
-    { name: "Events", tiles: ["Coming Soon", "Coming Soon", "Coming Soon", "Coming Soon"] },
+﻿import GalleryTabs from "./GalleryTabs";
+
+function getImageUrls(photo) {
+  const imgs = Array.isArray(photo.image) ? photo.image : [];
+  return imgs.map(function (img) {
+    let raw = img.url;
+    if (!raw) {
+      return null;
+    }
+    if (raw.startsWith("http")) {
+      return { src: raw, caption: photo.caption };
+    }
+    return { src: process.env.STRAPI_URL + raw, caption: photo.caption };
+  }).filter(function (x) { return x !== null; });
+}
+
+async function getPhotos() {
+  try {
+    const res = await fetch(process.env.STRAPI_URL + "/api/gallery-photos?populate=*", {
+      headers: {
+        Authorization: "Bearer " + process.env.STRAPI_API_TOKEN,
+      },
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      return [];
+    }
+
+    const json = await res.json();
+    return json.data;
+  } catch (e) {
+    return [];
+  }
+}
+
+export default async function Gallery() {
+  const photos = await getPhotos();
+
+  const categoryDefs = [
+    { name: "Actors", key: "Actors" },
+    { name: "Actresses", key: "Actresses" },
+    { name: "Events", key: "Events" },
   ];
+
+  const categories = categoryDefs.map(function (def) {
+    const shoots = photos
+      .filter(function (p) { return p.category === def.key; })
+      .map(function (p) {
+        return {
+          caption: p.caption,
+          person: p.person,
+          images: getImageUrls(p),
+        };
+      })
+      .filter(function (s) { return s.images.length > 0; });
+
+    return { name: def.name, key: def.key, shoots: shoots };
+  });
 
   return (
     <section id="gallery" className="px-8 md:px-16 py-24">
@@ -14,27 +67,7 @@
         <h2 className="font-display text-4xl md:text-5xl text-cream">Galleries</h2>
       </div>
 
-      {categories.map(function (cat, ci) {
-        return (
-          <div key={ci} className="mb-14">
-            <div className="flex items-center justify-between mb-5">
-              <h3 className="font-display text-2xl tracking-wide text-cream">{cat.name}</h3>
-              <a href="#" className="font-mono text-[11px] tracking-widest uppercase text-muted border-b border-cream/20 pb-1 hover:text-gold hover:border-gold transition">
-                View All
-              </a>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
-              {cat.tiles.map(function (label, i) {
-                return (
-                  <div key={i} className="aspect-[3/4] rounded-md border border-dashed border-cream/15 bg-surface flex items-center justify-center">
-                    <span className="font-mono text-[11px] tracking-wider uppercase text-muted/50">{label}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        );
-      })}
+      <GalleryTabs categories={categories} />
     </section>
   );
 }

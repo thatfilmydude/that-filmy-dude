@@ -1,5 +1,26 @@
 ﻿import ReviewCard from "./ReviewCard";
 
+function getPosterUrl(review) {
+  let raw = null;
+  if (review.Poster && review.Poster.url) {
+    raw = review.Poster.url;
+  } else if (
+    review.Poster &&
+    review.Poster.data &&
+    review.Poster.data.attributes &&
+    review.Poster.data.attributes.url
+  ) {
+    raw = review.Poster.data.attributes.url;
+  }
+  if (!raw) {
+    return null;
+  }
+  if (raw.startsWith("http")) {
+    return raw;
+  }
+  return process.env.STRAPI_URL + raw;
+}
+
 async function getReviews() {
   try {
     const res = await fetch(process.env.STRAPI_URL + "/api/reviews?populate=*", {
@@ -46,6 +67,7 @@ export default async function Reviews() {
               <ReviewCard
                 key={i}
                 slug={r.slug}
+                posterUrl={getPosterUrl(r)}
                 genre={r.genre}
                 duration={r.duration}
                 title={r.title}

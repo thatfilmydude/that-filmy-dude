@@ -4,11 +4,18 @@ export default function ReviewCard(props) {
   return (
     <Link href={"/reviews/" + props.slug} className="block">
       <article className="relative bg-surface border border-cream/10 rounded-lg overflow-hidden hover:-translate-y-1.5 hover:border-gold/40 transition">
-        <div className="h-48 relative flex items-center justify-center bg-gradient-to-br from-branddark via-[#341018] to-surface">
-          <span className="font-display text-sm tracking-widest uppercase text-cream/50">
-            {props.genre} - {props.duration}
-          </span>
-        </div>
+        {props.posterUrl ? (
+          <div className="h-48 relative">
+            <img src={props.posterUrl} alt={props.title} className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-backdrop/80 via-transparent to-transparent" />
+          </div>
+        ) : (
+          <div className="h-48 relative flex items-center justify-center bg-gradient-to-br from-branddark via-[#341018] to-surface">
+            <span className="font-display text-sm tracking-widest uppercase text-cream/50">
+              {props.genre} - {props.duration}
+            </span>
+          </div>
+        )}
 
         <div className="px-6 pt-6">
           <span className="block font-mono text-[11px] tracking-widest uppercase text-gold mb-2">
