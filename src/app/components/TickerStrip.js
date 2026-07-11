@@ -1,10 +1,49 @@
-﻿export default function TickerStrip() {
-  const items = [
-    "NOW REVIEWING - MONSOON DIARIES",
-    "TRENDING - FIRST LOOK: EMBER ROAD",
-    "JUST IN - BOX OFFICE WEEK 3 REPORT",
-    "GALLERY - BEHIND THE SCENES: KAALPURUSH",
-  ];
+﻿async function getReviews() {
+  try {
+    const res = await fetch(process.env.STRAPI_URL + "/api/reviews?sort=createdAt:desc&pagination[limit]=5", {
+      headers: { Authorization: "Bearer " + process.env.STRAPI_API_TOKEN },
+      cache: "no-store",
+    });
+    if (!res.ok) return [];
+    const json = await res.json();
+    return json.data;
+  } catch (e) {
+    return [];
+  }
+}
+
+async function getPosts() {
+  try {
+    const res = await fetch(process.env.STRAPI_URL + "/api/posts?sort=createdAt:desc&pagination[limit]=5", {
+      headers: { Authorization: "Bearer " + process.env.STRAPI_API_TOKEN },
+      cache: "no-store",
+    });
+    if (!res.ok) return [];
+    const json = await res.json();
+    return json.data;
+  } catch (e) {
+    return [];
+  }
+}
+
+export default async function TickerStrip() {
+  const reviews = await getReviews();
+  const posts = await getPosts();
+
+  const items = [];
+
+  reviews.forEach(function (r) {
+    items.push("NOW REVIEWING - " + r.title.toUpperCase());
+  });
+
+  posts.forEach(function (p) {
+    const label = p.category === "Blog" ? "FROM THE BLOG - " : "JUST IN - ";
+    items.push(label + p.title.toUpperCase());
+  });
+
+  if (items.length === 0) {
+    return null;
+  }
 
   const doubled = items.concat(items);
 
