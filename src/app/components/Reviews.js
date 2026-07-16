@@ -12,28 +12,18 @@ function getPosterUrl(review) {
   ) {
     raw = review.Poster.data.attributes.url;
   }
-  if (!raw) {
-    return null;
-  }
-  if (raw.startsWith("http")) {
-    return raw;
-  }
+  if (!raw) return null;
+  if (raw.startsWith("http")) return raw;
   return process.env.STRAPI_URL + raw;
 }
 
 async function getReviews() {
   try {
     const res = await fetch(process.env.STRAPI_URL + "/api/reviews?populate=*", {
-      headers: {
-        Authorization: "Bearer " + process.env.STRAPI_API_TOKEN,
-      },
+      headers: { Authorization: "Bearer " + process.env.STRAPI_API_TOKEN },
       cache: "no-store",
     });
-
-    if (!res.ok) {
-      return [];
-    }
-
+    if (!res.ok) return [];
     const json = await res.json();
     return json.data;
   } catch (e) {
@@ -43,6 +33,10 @@ async function getReviews() {
 
 export default async function Reviews() {
   const reviews = await getReviews();
+
+  if (reviews.length === 0) {
+    return null;
+  }
 
   return (
     <section id="reviews" className="px-8 md:px-16 py-24">
@@ -58,27 +52,23 @@ export default async function Reviews() {
         </a>
       </div>
 
-      {reviews.length === 0 ? (
-        <p className="font-mono text-sm text-muted">No reviews published yet.</p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {reviews.map(function (r, i) {
-            return (
-              <ReviewCard
-                key={i}
-                slug={r.slug}
-                posterUrl={getPosterUrl(r)}
-                genre={r.genre}
-                duration={r.duration}
-                title={r.title}
-                excerpt={r.excerpt}
-                rating={r.rating + " out of 5 stars"}
-                author={r.author}
-              />
-            );
-          })}
-        </div>
-      )}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {reviews.map(function (r, i) {
+          return (
+            <ReviewCard
+              key={i}
+              slug={r.slug}
+              posterUrl={getPosterUrl(r)}
+              genre={r.genre}
+              duration={r.duration}
+              title={r.title}
+              excerpt={r.excerpt}
+              rating={r.rating + " out of 5 stars"}
+              author={r.author}
+            />
+          );
+        })}
+      </div>
     </section>
   );
 }

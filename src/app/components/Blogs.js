@@ -3,18 +3,12 @@
 async function getPosts() {
   try {
     const res = await fetch(process.env.STRAPI_URL + "/api/posts?populate=*", {
-    headers: {
-      Authorization: "Bearer " + process.env.STRAPI_API_TOKEN,
-    },
-    cache: "no-store",
-  });
-
-  if (!res.ok) {
-    return [];
-  }
-
-  const json = await res.json();
-  return json.data;
+      headers: { Authorization: "Bearer " + process.env.STRAPI_API_TOKEN },
+      cache: "no-store",
+    });
+    if (!res.ok) return [];
+    const json = await res.json();
+    return json.data;
   } catch (e) {
     return [];
   }
@@ -22,9 +16,11 @@ async function getPosts() {
 
 export default async function Blogs() {
   const posts = await getPosts();
-  const blogs = posts.filter(function (p) {
-    return p.category === "Blog";
-  });
+  const blogs = posts.filter(function (p) { return p.category === "Blog"; });
+
+  if (blogs.length === 0) {
+    return null;
+  }
 
   return (
     <section id="blogs" className="px-8 md:px-16 py-24">
@@ -40,23 +36,11 @@ export default async function Blogs() {
         </a>
       </div>
 
-      {blogs.length === 0 ? (
-        <p className="font-mono text-sm text-muted">No blog posts published yet.</p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
-          {blogs.map(function (b, i) {
-            return (
-              <BlogEntry
-                key={i}
-                date={b.kicker ? b.kicker.toUpperCase() : ""}
-                title={b.title}
-                excerpt={b.excerpt}
-              />
-            );
-          })}
-        </div>
-      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
+        {blogs.map(function (b, i) {
+          return <BlogEntry key={i} date={b.kicker ? b.kicker.toUpperCase() : ""} title={b.title} excerpt={b.excerpt} />;
+        })}
+      </div>
     </section>
   );
 }
-
