@@ -23,6 +23,35 @@ function getCoverUrl(post) {
   return process.env.STRAPI_URL + raw;
 }
 
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const post = await getPost(slug);
+
+  if (!post) {
+    return { title: "That Filmy Dude" };
+  }
+
+  const coverUrl = getCoverUrl(post);
+  const images = coverUrl ? [{ url: coverUrl, width: 1200, height: 630 }] : [];
+
+  return {
+    title: post.title + " - That Filmy Dude",
+    description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      images: images,
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+      images: coverUrl ? [coverUrl] : [],
+    },
+  };
+}
+
 function renderBlocks(blocks) {
   if (!Array.isArray(blocks)) return null;
   return blocks.map(function (block, i) {
