@@ -17,7 +17,7 @@ async function getNews() {
   try {
     const res = await fetch(process.env.STRAPI_URL + "/api/posts?filters[category][$eq]=News&sort=createdAt:desc&pagination[limit]=8&populate=*", {
       headers: { Authorization: "Bearer " + process.env.STRAPI_API_TOKEN },
-      cache: "no-store",
+      next: { revalidate: 60 },
     });
     if (!res.ok) return [];
     const json = await res.json();
@@ -29,10 +29,7 @@ async function getNews() {
 
 export default async function News() {
   const news = await getNews();
-
-  if (news.length === 0) {
-    return null;
-  }
+  if (news.length === 0) return null;
 
   return (
     <section id="news" className="px-8 md:px-16 py-24 bg-surface border-y border-cream/10">
@@ -56,12 +53,10 @@ export default async function News() {
               ) : (
                 <div className="w-28 h-20 sm:w-40 sm:h-28 rounded-lg bg-gradient-to-br from-branddark to-surface flex-shrink-0" />
               )}
-
               <div className="flex-1 min-w-0">
                 <span className="font-mono text-xs text-muted block mb-2">{formatDate(item.createdAt)}</span>
                 <h4 className="text-lg sm:text-xl text-cream group-hover:text-gold transition leading-snug">{item.title}</h4>
               </div>
-
               <span className="text-gold-dim text-2xl flex-shrink-0">&#8599;</span>
             </a>
           );

@@ -4,7 +4,7 @@ async function getPosts() {
   try {
     const res = await fetch(process.env.STRAPI_URL + "/api/posts?populate=*", {
       headers: { Authorization: "Bearer " + process.env.STRAPI_API_TOKEN },
-      cache: "no-store",
+      next: { revalidate: 60 },
     });
     if (!res.ok) return [];
     const json = await res.json();
@@ -17,10 +17,7 @@ async function getPosts() {
 export default async function Articles() {
   const posts = await getPosts();
   const articles = posts.filter(function (p) { return p.category === "Article"; });
-
-  if (articles.length === 0) {
-    return null;
-  }
+  if (articles.length === 0) return null;
 
   return (
     <section id="articles" className="px-8 md:px-16 py-24 bg-paper border-y border-black/10">
@@ -34,16 +31,7 @@ export default async function Articles() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
         {articles.map(function (a, i) {
           return (
-            <ArticleCard
-              key={i}
-              slug={a.slug}
-              tag={a.kicker ? a.kicker.toUpperCase() : "FEATURE"}
-              kicker={a.kicker}
-              title={a.title}
-              excerpt={a.excerpt}
-              meta={(a.readTime || "") + " - BY " + (a.author || "")}
-              featured={a.featured}
-            />
+            <ArticleCard key={i} slug={a.slug} tag={a.kicker ? a.kicker.toUpperCase() : "FEATURE"} kicker={a.kicker} title={a.title} excerpt={a.excerpt} meta={(a.readTime || "") + " - BY " + (a.author || "")} featured={a.featured} />
           );
         })}
       </div>

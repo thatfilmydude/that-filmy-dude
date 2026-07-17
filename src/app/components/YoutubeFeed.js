@@ -1,7 +1,7 @@
 ﻿async function getVideos() {
   try {
     const url = "https://www.googleapis.com/youtube/v3/search?key=" + process.env.YOUTUBE_API_KEY + "&channelId=" + process.env.YOUTUBE_CHANNEL_ID + "&part=snippet&order=date&maxResults=8&type=video";
-    const res = await fetch(url, { cache: "no-store" });
+    const res = await fetch(url, { next: { revalidate: 300 } });
     if (!res.ok) return [];
     const json = await res.json();
     return json.items || [];
@@ -12,10 +12,7 @@
 
 export default async function YoutubeFeed() {
   const videos = await getVideos();
-
-  if (videos.length === 0) {
-    return null;
-  }
+  if (videos.length === 0) return null;
 
   const subscribeUrl = "https://www.youtube.com/channel/" + process.env.YOUTUBE_CHANNEL_ID;
 
@@ -48,9 +45,7 @@ export default async function YoutubeFeed() {
         })}
       </div>
 
-      <a href={subscribeUrl} target="_blank" rel="noopener noreferrer" className="inline-block mt-8 font-mono text-xs tracking-widest uppercase text-gold border-b border-gold/40 pb-1 hover:border-gold transition">
-        Subscribe on YouTube &rarr;
-      </a>
+      <a href={subscribeUrl} target="_blank" rel="noopener noreferrer" className="inline-block mt-8 font-mono text-xs tracking-widest uppercase text-gold border-b border-gold/40 pb-1 hover:border-gold transition">Subscribe on YouTube &rarr;</a>
     </section>
   );
 }

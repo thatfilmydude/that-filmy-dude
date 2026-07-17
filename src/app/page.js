@@ -1,4 +1,5 @@
-﻿import Header from "./components/Header";
+﻿import { Suspense } from "react";
+import Header from "./components/Header";
 import Hero from "./components/Hero";
 import TickerStrip from "./components/TickerStrip";
 import Reviews from "./components/Reviews";
@@ -8,19 +9,34 @@ import Blogs from "./components/Blogs";
 import Gallery from "./components/Gallery";
 import YoutubeFeed from "./components/YoutubeFeed";
 import Footer from "./components/Footer";
+import SectionSkeleton from "./components/SectionSkeleton";
 
 export default function Home() {
   return (
     <>
       <Header />
       <Hero />
-      <TickerStrip />
-      <Reviews />
-      <News />
-      <Articles />
-      <Blogs />
-      <Gallery />
-      <YoutubeFeed />
+      <Suspense fallback={null}>
+        <TickerStrip />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <Reviews />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <News />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <Articles />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <Blogs />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <Gallery />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <YoutubeFeed />
+      </Suspense>
       <Footer />
     </>
   );

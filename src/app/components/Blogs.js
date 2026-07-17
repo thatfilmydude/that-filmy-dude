@@ -4,7 +4,7 @@ async function getPosts() {
   try {
     const res = await fetch(process.env.STRAPI_URL + "/api/posts?populate=*", {
       headers: { Authorization: "Bearer " + process.env.STRAPI_API_TOKEN },
-      cache: "no-store",
+      next: { revalidate: 60 },
     });
     if (!res.ok) return [];
     const json = await res.json();
@@ -17,10 +17,7 @@ async function getPosts() {
 export default async function Blogs() {
   const posts = await getPosts();
   const blogs = posts.filter(function (p) { return p.category === "Blog"; });
-
-  if (blogs.length === 0) {
-    return null;
-  }
+  if (blogs.length === 0) return null;
 
   return (
     <section id="blogs" className="px-8 md:px-16 py-24">
