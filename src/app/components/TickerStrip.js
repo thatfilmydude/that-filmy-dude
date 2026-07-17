@@ -2,7 +2,7 @@
   try {
     const res = await fetch(process.env.STRAPI_URL + "/api/reviews?sort=createdAt:desc&pagination[limit]=5", {
       headers: { Authorization: "Bearer " + process.env.STRAPI_API_TOKEN },
-      cache: "no-store",
+      next: { revalidate: 60 },
     });
     if (!res.ok) return [];
     const json = await res.json();
@@ -16,7 +16,7 @@ async function getPosts() {
   try {
     const res = await fetch(process.env.STRAPI_URL + "/api/posts?sort=createdAt:desc&pagination[limit]=5", {
       headers: { Authorization: "Bearer " + process.env.STRAPI_API_TOKEN },
-      cache: "no-store",
+      next: { revalidate: 60 },
     });
     if (!res.ok) return [];
     const json = await res.json();
@@ -30,22 +30,36 @@ export default async function TickerStrip() {
   const reviews = await getReviews();
   const posts = await getPosts();
 
-  const items = [];
+  const combined = [];
 
   reviews.forEach(function (r) {
-    items.push("NOW REVIEWING - " + r.title.toUpperCase());
+    combined.push({
+      text: "NOW REVIEWING - " + r.title.toUpperCase(),
+      date: new Date(r.createdAt).getTime(),
+    });
   });
 
   posts.forEach(function (p) {
-    const label = p.category === "Blog" ? "FROM THE BLOG - " : "JUST IN - ";
-    items.push(label + p.title.toUpperCase());
+    const label = p.category === "Blog" ? "FROM THE BLOG - " : p.category === "News" ? "JUST IN - " : "NEW ARTICLE - ";
+    combined.push({
+      text: label + p.title.toUpperCase(),
+      date: new Date(p.createdAt).getTime(),
+    });
   });
 
-  if (items.length === 0) {
+  combined.sort(function (a, b) {
+    return b.date - a.date;
+  });
+
+  const latest = combined.slice(0, 3).map(function (item) {
+    return item.text;
+  });
+
+  if (latest.length === 0) {
     return null;
   }
 
-  const doubled = items.concat(items);
+  const doubled = latest.concat(latest);
 
   return (
     <div className="flex overflow-hidden border-b border-cream/10 bg-surface whitespace-nowrap">
