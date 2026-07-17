@@ -26,14 +26,9 @@ export default async function Articles() {
     <section id="articles" className="px-8 md:px-16 py-24 bg-paper border-y border-black/10">
       <div className="flex items-end justify-between border-b border-black/15 pb-5 mb-12 flex-wrap gap-4">
         <div>
-          <span className="block font-mono text-xs tracking-[0.2em] uppercase text-branddark mb-2">
-            Deep Focus
-          </span>
+          <span className="block font-mono text-xs tracking-[0.2em] uppercase text-branddark mb-2">Deep Focus</span>
           <h2 className="font-display text-4xl md:text-5xl text-[#1C1416]">Articles</h2>
         </div>
-        <a href="#" className="font-mono text-xs tracking-widest uppercase text-[#1C1416]/55 border-b border-black/20 pb-1 hover:text-branddark hover:border-branddark transition">
-          All Articles
-        </a>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -41,6 +36,7 @@ export default async function Articles() {
           return (
             <ArticleCard
               key={i}
+              slug={a.slug}
               tag={a.kicker ? a.kicker.toUpperCase() : "FEATURE"}
               kicker={a.kicker}
               title={a.title}

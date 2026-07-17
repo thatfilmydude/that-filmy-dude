@@ -6,16 +6,8 @@
 
 function getCoverUrl(item) {
   let raw = null;
-  if (item.cover && item.cover.url) {
-    raw = item.cover.url;
-  } else if (
-    item.cover &&
-    item.cover.data &&
-    item.cover.data.attributes &&
-    item.cover.data.attributes.url
-  ) {
-    raw = item.cover.data.attributes.url;
-  }
+  if (item.cover && item.cover.url) raw = item.cover.url;
+  else if (item.cover && item.cover.data && item.cover.data.attributes && item.cover.data.attributes.url) raw = item.cover.data.attributes.url;
   if (!raw) return null;
   if (raw.startsWith("http")) return raw;
   return process.env.STRAPI_URL + raw;
@@ -46,9 +38,7 @@ export default async function News() {
     <section id="news" className="px-8 md:px-16 py-24 bg-surface border-y border-cream/10">
       <div className="flex items-end justify-between border-b border-cream/10 pb-5 mb-12 flex-wrap gap-4">
         <div>
-          <span className="block font-mono text-xs tracking-[0.2em] uppercase text-gold mb-2">
-            The Wire
-          </span>
+          <span className="block font-mono text-xs tracking-[0.2em] uppercase text-gold mb-2">The Wire</span>
           <h2 className="font-display text-4xl md:text-5xl text-cream">Fresh Off The Set</h2>
         </div>
       </div>
@@ -56,8 +46,9 @@ export default async function News() {
       <div className="flex flex-col">
         {news.map(function (item, i) {
           const coverUrl = getCoverUrl(item);
+          const href = "/articles/" + item.slug;
           return (
-            <div key={i} className="flex items-center gap-6 py-6 border-b border-cream/10 hover:pl-2 transition-all group">
+            <a key={i} href={href} className="flex items-center gap-6 py-6 border-b border-cream/10 hover:pl-2 transition-all group">
               {coverUrl ? (
                 <div className="w-28 h-20 sm:w-40 sm:h-28 rounded-lg overflow-hidden border border-cream/10 flex-shrink-0">
                   <img src={coverUrl} alt={item.title} className="w-full h-full object-cover" />
@@ -72,7 +63,7 @@ export default async function News() {
               </div>
 
               <span className="text-gold-dim text-2xl flex-shrink-0">&#8599;</span>
-            </div>
+            </a>
           );
         })}
       </div>

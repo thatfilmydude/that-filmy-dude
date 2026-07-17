@@ -26,19 +26,14 @@ export default async function Blogs() {
     <section id="blogs" className="px-8 md:px-16 py-24">
       <div className="flex items-end justify-between border-b border-cream/10 pb-5 mb-12 flex-wrap gap-4">
         <div>
-          <span className="block font-mono text-xs tracking-[0.2em] uppercase text-gold mb-2">
-            Off The Record
-          </span>
+          <span className="block font-mono text-xs tracking-[0.2em] uppercase text-gold mb-2">Off The Record</span>
           <h2 className="font-display text-4xl md:text-5xl text-cream">Blogs</h2>
         </div>
-        <a href="#" className="font-mono text-xs tracking-widest uppercase text-muted border-b border-cream/20 pb-1 hover:text-gold hover:border-gold transition">
-          All Blogs
-        </a>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
         {blogs.map(function (b, i) {
-          return <BlogEntry key={i} date={b.kicker ? b.kicker.toUpperCase() : ""} title={b.title} excerpt={b.excerpt} />;
+          return <BlogEntry key={i} slug={b.slug} date={b.kicker ? b.kicker.toUpperCase() : ""} title={b.title} excerpt={b.excerpt} />;
         })}
       </div>
     </section>
