@@ -2,7 +2,7 @@
 
 async function getPosts() {
   try {
-    const res = await fetch(process.env.STRAPI_URL + "/api/posts?populate=*", {
+    const res = await fetch(process.env.STRAPI_URL + "/api/posts?populate=*&sort=createdAt:desc", {
       headers: { Authorization: "Bearer " + process.env.STRAPI_API_TOKEN },
       next: { revalidate: 60 },
     });
@@ -36,3 +36,4 @@ export default async function Blogs() {
     </section>
   );
 }
+

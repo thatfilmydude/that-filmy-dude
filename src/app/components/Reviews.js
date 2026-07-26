@@ -11,7 +11,7 @@ function getPosterUrl(review) {
 
 async function getReviews() {
   try {
-    const res = await fetch(process.env.STRAPI_URL + "/api/reviews?populate=*", {
+    const res = await fetch(process.env.STRAPI_URL + "/api/reviews?populate=*&sort=createdAt:desc", {
       headers: { Authorization: "Bearer " + process.env.STRAPI_API_TOKEN },
       next: { revalidate: 60 },
     });
@@ -47,3 +47,4 @@ export default async function Reviews() {
     </section>
   );
 }
+
