@@ -1,6 +1,23 @@
-﻿async function getPosts() {
+﻿async function getInstagramToken() {
   try {
-    const url = "https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url&access_token=" + process.env.INSTAGRAM_ACCESS_TOKEN + "&limit=8";
+    const res = await fetch(process.env.STRAPI_URL + "/api/site-setting", {
+      headers: { Authorization: "Bearer " + process.env.STRAPI_API_TOKEN },
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json.data.instagram_token || null;
+  } catch (e) {
+    return null;
+  }
+}
+
+async function getPosts() {
+  const token = await getInstagramToken();
+  if (!token) return [];
+
+  try {
+    const url = "https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url&access_token=" + token + "&limit=8";
     const res = await fetch(url, { next: { revalidate: 60 } });
     if (!res.ok) return [];
     const json = await res.json();
