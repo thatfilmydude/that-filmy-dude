@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 
@@ -75,7 +75,7 @@ export default function Lightbox({ images }) {
           {bulbs.map(function (_, i) { return <span key={i} className="w-2 h-2 bg-gold rounded-[1px]" />; })}
         </div>
 
-        <div className="flex gap-3 overflow-x-auto pb-1 snap-x snap-mandatory">
+        <div className="hide-scrollbar flex gap-3 overflow-x-auto pb-1 snap-x snap-mandatory">
           {images.map(function (img, i) {
             return (
               <button key={i} onClick={function () { openImage(i); }} className="relative w-32 sm:w-40 aspect-[3/4] flex-shrink-0 rounded-sm overflow-hidden border border-cream/10 hover:border-gold/50 transition snap-start">
@@ -120,3 +120,4 @@ export default function Lightbox({ images }) {
     </>
   );
 }
+

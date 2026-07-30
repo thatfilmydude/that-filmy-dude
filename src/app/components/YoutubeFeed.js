@@ -1,4 +1,4 @@
-﻿async function getVideos() {
+async function getVideos() {
   try {
     const url = "https://www.googleapis.com/youtube/v3/search?key=" + process.env.YOUTUBE_API_KEY + "&channelId=" + process.env.YOUTUBE_CHANNEL_ID + "&part=snippet&order=date&maxResults=8&type=video";
     const res = await fetch(url, { next: { revalidate: 300 } });
@@ -23,19 +23,19 @@ export default async function YoutubeFeed() {
         <h2 className="font-display text-4xl md:text-5xl text-cream">Latest On YouTube</h2>
       </div>
 
-      <div className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {videos.map(function (v, i) {
           const videoId = v.id.videoId;
           const thumb = v.snippet.thumbnails.high.url;
           const title = v.snippet.title;
           const watchUrl = "https://www.youtube.com/watch?v=" + videoId;
           return (
-            <a key={i} href={watchUrl} target="_blank" rel="noopener noreferrer" className="relative w-64 flex-shrink-0 snap-start group">
+            <a key={i} href={watchUrl} target="_blank" rel="noopener noreferrer" className="group">
               <div className="aspect-video rounded-lg overflow-hidden border border-cream/10 relative">
                 <img src={thumb} alt={title} className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-backdrop/20 group-hover:bg-backdrop/5 transition flex items-center justify-center">
-                  <div className="w-12 h-12 rounded-full bg-gold flex items-center justify-center group-hover:scale-105 transition">
-                    <div className="w-0 h-0 border-t-[7px] border-t-transparent border-l-[12px] border-l-backdrop border-b-[7px] border-b-transparent ml-1" />
+                  <div className="w-10 h-10 rounded-full bg-gold flex items-center justify-center group-hover:scale-105 transition">
+                    <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[10px] border-l-backdrop border-b-[6px] border-b-transparent ml-0.5" />
                   </div>
                 </div>
               </div>
