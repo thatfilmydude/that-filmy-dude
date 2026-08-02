@@ -1,4 +1,13 @@
-﻿import ArticleCard from "./ArticleCard";
+import ArticleCard from "./ArticleCard";
+
+function getCoverUrl(post) {
+  let raw = null;
+  if (post.cover && post.cover.url) raw = post.cover.url;
+  else if (post.cover && post.cover.data && post.cover.data.attributes && post.cover.data.attributes.url) raw = post.cover.data.attributes.url;
+  if (!raw) return null;
+  if (raw.startsWith("http")) return raw;
+  return process.env.STRAPI_URL + raw;
+}
 
 async function getPosts() {
   try {
@@ -31,11 +40,10 @@ export default async function Articles() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
         {articles.map(function (a, i) {
           return (
-            <ArticleCard key={i} slug={a.slug} tag={a.kicker ? a.kicker.toUpperCase() : "FEATURE"} kicker={a.kicker} title={a.title} excerpt={a.excerpt} meta={(a.readTime || "") + " - BY " + (a.author || "")} featured={a.featured} />
+            <ArticleCard key={i} slug={a.slug} coverUrl={getCoverUrl(a)} tag={a.kicker ? a.kicker.toUpperCase() : "FEATURE"} kicker={a.kicker} title={a.title} excerpt={a.excerpt} meta={(a.readTime || "") + " - BY " + (a.author || "")} featured={a.featured} />
           );
         })}
       </div>
     </section>
   );
 }
-
