@@ -22,6 +22,9 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata = {
   title: "That Filmy Dude",
   description: "Reviews that do not kiss the poster.",
+  verification: {
+    google: "xufRypdXXi5h5utrK6zHLlg0DeNr-F0uPCFSWkCNu2U",
+  },
 };
 
 export default function RootLayout({ children }) {
