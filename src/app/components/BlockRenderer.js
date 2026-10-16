@@ -2,6 +2,8 @@
 // Handles links, bold/italic/underline/strike/code, lists, headings, quotes,
 // code blocks, images and standalone YouTube links (shown as an embedded player).
 
+import { Fragment } from "react";
+
 const YT = /(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:[^#]*&)?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/;
 
 export function youtubeId(url) {
@@ -108,16 +110,30 @@ function renderInline(children, t) {
   });
 }
 
-function standaloneYouTubeUrl(children) {
+// Finds a YouTube address pasted into a paragraph, either as a link whose visible
+// text is the address itself, or as plain text. Returns the address plus the
+// paragraph's remaining content, or null when there is none. A link with real
+// words on it, such as "watch here", is left alone as an ordinary link.
+function splitVideoLink(children) {
   if (!Array.isArray(children)) return null;
-  const real = children.filter(function (c) {
-    return !(c.type !== "link" && (c.text || "").trim() === "");
-  });
-  if (real.length !== 1) return null;
-  const only = real[0];
-  if (only.type === "link") return youtubeId(only.url) ? only.url : null;
-  const t = (only.text || "").trim();
-  return youtubeId(t) && /^https?:\/\/\S+$/.test(t) ? t : null;
+  for (let i = 0; i < children.length; i++) {
+    const c = children[i];
+    if (c.type === "link") {
+      if (!youtubeId(c.url)) continue;
+      const label = plainText(c.children).trim();
+      if (/^https?:\/\//i.test(label) || /youtu\.?be/i.test(label)) {
+        return { url: c.url, rest: children.filter(function (_, k) { return k !== i; }) };
+      }
+    } else if (typeof c.text === "string") {
+      const m = c.text.match(/https?:\/\/[^\s]+/);
+      if (m && youtubeId(m[0])) {
+        const copy = children.slice();
+        copy[i] = Object.assign({}, c, { text: c.text.replace(m[0], "") });
+        return { url: m[0], rest: copy };
+      }
+    }
+  }
+  return null;
 }
 
 function renderList(block, key, t) {
@@ -147,8 +163,16 @@ export function renderBlocks(blocks, theme) {
   return blocks.map(function (block, i) {
     if (block.type === "paragraph") {
       if (plainText(block.children).trim() === "") return null;
-      const yt = standaloneYouTubeUrl(block.children);
-      if (yt) return <YouTubeEmbed key={i} url={yt} />;
+      const video = splitVideoLink(block.children);
+      if (video) {
+        const hasText = plainText(video.rest).trim() !== "";
+        return (
+          <Fragment key={i}>
+            {hasText ? <p className="mb-6 text-[17px]">{renderInline(video.rest, t)}</p> : null}
+            <YouTubeEmbed url={video.url} />
+          </Fragment>
+        );
+      }
       return <p key={i} className="mb-6 text-[17px]">{renderInline(block.children, t)}</p>;
     }
     if (block.type === "heading") {
