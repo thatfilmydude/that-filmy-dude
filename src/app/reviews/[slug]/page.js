@@ -1,6 +1,7 @@
-﻿import { notFound } from "next/navigation";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import TrailerThumb from "../../components/TrailerThumb";
+import { renderBlocks } from "../../components/BlockRenderer";
 
 async function getReview(slug) {
   try {
@@ -67,29 +68,6 @@ function formatDate(dateStr) {
   const d = new Date(dateStr);
   const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   return months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
-}
-
-function renderBlocks(blocks) {
-  if (!Array.isArray(blocks)) return null;
-  return blocks.map(function (block, i) {
-    if (block.type === "paragraph") {
-      const text = (block.children || []).map(function (c) { return c.text || ""; }).join("");
-      if (text.trim() === "") return null;
-      return <p key={i} className="mb-6 text-[17px]">{text}</p>;
-    }
-    if (block.type === "heading") {
-      const text = (block.children || []).map(function (c) { return c.text || ""; }).join("");
-      return <h2 key={i} className="font-display text-3xl text-cream mt-10 mb-4 tracking-wide">{text}</h2>;
-    }
-    if (block.type === "quote") {
-      const text = (block.children || []).map(function (c) { return c.text || ""; }).join("");
-      return <blockquote key={i} className="border-l-2 border-gold pl-5 py-1 italic text-gold text-xl my-8">{text}</blockquote>;
-    }
-    if (block.type === "image") {
-      return <img key={i} src={block.image.url} alt={block.image.alternativeText || ""} className="rounded-lg my-8 w-full border border-cream/10" />;
-    }
-    return null;
-  });
 }
 
 function RatingStub({ rating }) {
@@ -164,7 +142,7 @@ export default async function ReviewPage({ params }) {
         <div className="border-t border-cream/10" />
 
         <article className="py-14 text-cream/80 leading-relaxed font-body">
-          {renderBlocks(review.content)}
+          {renderBlocks(review.content, "dark")}
         </article>
 
         <div className="pb-16">

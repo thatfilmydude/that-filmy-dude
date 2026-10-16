@@ -1,10 +1,10 @@
-﻿import { Suspense } from "react";
+import { Suspense } from "react";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import TickerStrip from "./components/TickerStrip";
+import Latest from "./components/Latest";
 import Reviews from "./components/Reviews";
-import News from "./components/News";
-import Articles from "./components/Articles";
+import Stories from "./components/Stories";
 import Blogs from "./components/Blogs";
 import Gallery from "./components/Gallery";
 import YoutubeFeed from "./components/YoutubeFeed";
@@ -21,13 +21,13 @@ export default function Home() {
         <TickerStrip />
       </Suspense>
       <Suspense fallback={<SectionSkeleton />}>
+        <Latest />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
         <Reviews />
       </Suspense>
       <Suspense fallback={<SectionSkeleton />}>
-        <News />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton />}>
-        <Articles />
+        <Stories />
       </Suspense>
       <Suspense fallback={<SectionSkeleton />}>
         <Blogs />

@@ -1,4 +1,4 @@
-﻿import ReviewCard from "./ReviewCard";
+import ReviewCard from "./ReviewCard";
 
 function getPosterUrl(review) {
   let raw = null;
@@ -11,7 +11,7 @@ function getPosterUrl(review) {
 
 async function getReviews() {
   try {
-    const res = await fetch(process.env.STRAPI_URL + "/api/reviews?populate=*&sort=createdAt:desc", {
+    const res = await fetch(process.env.STRAPI_URL + "/api/reviews?populate=*&sort=publishedAt:desc&pagination[limit]=3", {
       headers: { Authorization: "Bearer " + process.env.STRAPI_API_TOKEN },
       next: { revalidate: 60 },
     });
@@ -47,4 +47,3 @@ export default async function Reviews() {
     </section>
   );
 }
-

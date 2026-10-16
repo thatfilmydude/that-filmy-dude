@@ -1,6 +1,6 @@
-﻿async function getReviews() {
+async function getReviews() {
   try {
-    const res = await fetch(process.env.STRAPI_URL + "/api/reviews?sort=createdAt:desc&pagination[limit]=5", {
+    const res = await fetch(process.env.STRAPI_URL + "/api/reviews?sort=publishedAt:desc&pagination[limit]=5", {
       headers: { Authorization: "Bearer " + process.env.STRAPI_API_TOKEN },
       next: { revalidate: 60 },
     });
@@ -14,7 +14,7 @@
 
 async function getPosts() {
   try {
-    const res = await fetch(process.env.STRAPI_URL + "/api/posts?sort=createdAt:desc&pagination[limit]=5", {
+    const res = await fetch(process.env.STRAPI_URL + "/api/posts?sort=publishedAt:desc&pagination[limit]=5", {
       headers: { Authorization: "Bearer " + process.env.STRAPI_API_TOKEN },
       next: { revalidate: 60 },
     });
@@ -26,6 +26,10 @@ async function getPosts() {
   }
 }
 
+function when(item) {
+  return new Date(item.publishedAt || item.createdAt).getTime();
+}
+
 export default async function TickerStrip() {
   const reviews = await getReviews();
   const posts = await getPosts();
@@ -35,7 +39,7 @@ export default async function TickerStrip() {
   reviews.forEach(function (r) {
     combined.push({
       text: "NOW REVIEWING - " + r.title.toUpperCase(),
-      date: new Date(r.createdAt).getTime(),
+      date: when(r),
     });
   });
 
@@ -43,7 +47,7 @@ export default async function TickerStrip() {
     const label = p.category === "Blog" ? "FROM THE BLOG - " : p.category === "News" ? "JUST IN - " : "NEW ARTICLE - ";
     combined.push({
       text: label + p.title.toUpperCase(),
-      date: new Date(p.createdAt).getTime(),
+      date: when(p),
     });
   });
 
