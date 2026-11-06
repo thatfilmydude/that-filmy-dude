@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { renderBlocks, YouTubeEmbed } from "../../components/BlockRenderer";
+import Engagement from "../../components/Engagement";
 
 async function getPost(slug) {
   try {
@@ -81,6 +82,8 @@ export default async function ArticlePage({ params }) {
           {post.videoUrl ? <YouTubeEmbed url={post.videoUrl} /> : null}
           {renderBlocks(post.content)}
         </article>
+
+        <Engagement type="article" slug={slug} theme="light" />
 
         <div className="pb-16">
           <a href="/#articles" className="inline-block font-mono text-xs tracking-widest uppercase border border-black/20 text-[#1C1416] px-6 py-3 rounded-sm hover:border-branddark hover:text-branddark transition">&larr; Back to all articles</a>
