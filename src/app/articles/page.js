@@ -52,6 +52,21 @@ export default async function AllArticles() {
           ) : (
             <ArticleBoard items={items} />
           )}
+          {items.length > 0 ? (
+            <nav aria-label="Every article, in one list" className="mt-24 pt-10 border-t border-cream/10">
+              <h2 className="tfd-h2 text-cream mb-6" style={{ fontSize: "clamp(1.8rem,3vw,2.4rem)" }}>EVERY ARTICLE, IN ONE LIST</h2>
+              <ul className="columns-1 md:columns-2 gap-12 list-none p-0 m-0">
+                {items.map(function (i) {
+                  return (
+                    <li key={i.key} className="break-inside-avoid py-1.5">
+                      <a href={i.href} className="text-cream/80 hover:text-gold transition">{i.title}</a>
+                      <span className="font-mono text-[11px] tracking-widest uppercase text-muted ml-3">{i.date}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
+          ) : null}
         </div>
       </main>
       <Footer />
