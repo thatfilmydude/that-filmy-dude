@@ -1,7 +1,9 @@
 import { Suspense } from "react";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
-import TickerStrip from "./components/TickerStrip";
+import FilmStrip from "./components/FilmStrip";
+import Sections from "./components/Sections";
+import TicketForm from "./components/TicketForm";
 import Latest from "./components/Latest";
 import Reviews from "./components/Reviews";
 import Stories from "./components/Stories";
@@ -15,16 +17,23 @@ import SectionSkeleton from "./components/SectionSkeleton";
 export default function Home() {
   return (
     <>
-      <Header />
-      <Hero />
       <Suspense fallback={null}>
-        <TickerStrip />
+        <Header />
+      </Suspense>
+      <Suspense fallback={<div style={{ minHeight: 640 }} />}>
+        <Hero />
+      </Suspense>
+      <Suspense fallback={null}>
+        <FilmStrip />
       </Suspense>
       <Suspense fallback={<SectionSkeleton />}>
         <Latest />
       </Suspense>
       <Suspense fallback={<SectionSkeleton />}>
         <Reviews />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <Sections />
       </Suspense>
       <Suspense fallback={<SectionSkeleton />}>
         <Stories />
@@ -41,6 +50,7 @@ export default function Home() {
       <Suspense fallback={<SectionSkeleton />}>
         <InstagramFeed />
       </Suspense>
+      <TicketForm />
       <Footer />
     </>
   );

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import TrailerThumb from "../../components/TrailerThumb";
 import { renderBlocks } from "../../components/BlockRenderer";
+import Engagement from "../../components/Engagement";
 
 async function getReview(slug) {
   try {
@@ -144,6 +145,8 @@ export default async function ReviewPage({ params }) {
         <article className="py-14 text-cream/80 leading-relaxed font-body">
           {renderBlocks(review.content, "dark")}
         </article>
+
+        <Engagement type="review" slug={slug} theme="dark" />
 
         <div className="pb-16">
           <Link href="/#reviews" className="inline-block font-mono text-xs tracking-widest uppercase border border-cream/20 text-cream px-6 py-3 rounded-sm hover:border-gold hover:text-gold transition">&larr; Back to all reviews</Link>

@@ -2,6 +2,7 @@ import { Bebas_Neue, Fraunces, JetBrains_Mono } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import Script from "next/script";
 import AffiliateTracker from "./components/AffiliateTracker";
+import Cursor from "./components/Cursor";
 import "./globals.css";
 
 const bebasNeue = Bebas_Neue({
@@ -41,6 +42,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className="min-h-full flex flex-col">
         {children}
+        <Cursor />
         <AffiliateTracker />
         <GoogleAnalytics gaId="G-Z30M60YZNX" />
       </body>

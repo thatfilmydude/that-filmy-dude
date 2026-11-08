@@ -1,4 +1,5 @@
 ﻿import GalleryTabs from "./GalleryTabs";
+import LightTable from "./LightTable";
 
 function getImageUrls(photo) {
   const imgs = Array.isArray(photo.image) ? photo.image : [];
@@ -46,12 +47,23 @@ export default async function Gallery() {
 
   if (categories.length === 0) return null;
 
+  // one still per shoot for the light table, so it shows variety
+  const tableImages = [];
+  categories.forEach(function (cat) {
+    cat.shoots.forEach(function (sh) {
+      if (tableImages.length < 7 && sh.images[0] && !tableImages.some(function (t) { return t.src === sh.images[0].src; })) {
+        tableImages.push({ src: sh.images[0].src, caption: sh.person || sh.caption || "" });
+      }
+    });
+  });
+
   return (
     <section id="gallery" className="px-8 md:px-16 py-24">
       <div className="border-b border-cream/10 pb-5 mb-12">
         <span className="block font-mono text-xs tracking-[0.2em] uppercase text-gold mb-2">Frame By Frame</span>
         <h2 className="font-display text-4xl md:text-5xl text-cream">Galleries</h2>
       </div>
+      <LightTable images={tableImages} />
       <GalleryTabs categories={categories} />
     </section>
   );
