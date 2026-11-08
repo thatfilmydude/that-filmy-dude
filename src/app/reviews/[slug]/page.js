@@ -40,6 +40,7 @@ export async function generateMetadata({ params }) {
 
   return {
     title: review.title + " - That Filmy Dude",
+    alternates: { canonical: "/reviews/" + slug },
     description: review.excerpt,
     openGraph: {
       title: review.title,
