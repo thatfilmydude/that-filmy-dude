@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const LINKS = [
-  { href: "#reviews", label: "Reviews" },
-  { href: "#articles", label: "Articles" },
+  { href: "/reviews", label: "Reviews" },
+  { href: "/articles", label: "Articles" },
 ];
 
 export default function HeaderClient({ items }) {
@@ -55,13 +56,13 @@ export default function HeaderClient({ items }) {
       <div className="tfd-prog" aria-hidden="true"><i ref={prog} /></div>
       <header className={"tfd-nav" + (hide && !open ? " hide" : "") + (open ? " bg-backdrop" : "")}>
         <div className="max-w-[1240px] mx-auto px-5 md:px-8 flex items-center gap-6 h-[84px]">
-          <a href="#" className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-3">
             <Image src="/logo-full.png" alt="That Filmy Dude" width={354} height={477} priority className="h-[66px] w-auto" />
             <span className="flex flex-col leading-none">
               <span className="font-display text-2xl tracking-wide text-cream">THAT FILMY DUDE</span>
               <span className="font-mono text-[9px] tracking-[0.24em] uppercase text-gold mt-1">Reel Talk · No Filter</span>
             </span>
-          </a>
+          </Link>
 
           <nav className="hidden md:flex gap-8 mx-auto" aria-label="Main">
             {LINKS.map(function (l) { return <a key={l.label} href={l.href} className="tfd-link">{l.label}</a>; })}

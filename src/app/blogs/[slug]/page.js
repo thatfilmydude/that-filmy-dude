@@ -63,7 +63,7 @@ export default async function BlogPage({ params }) {
     <main className="min-h-screen bg-backdrop">
       <div className="max-w-3xl mx-auto px-8 md:px-0">
         <div className="pt-10 pb-8">
-          <a href="/#blogs" className="inline-block font-mono text-[11px] tracking-widest uppercase text-gold/80 hover:text-gold transition mb-8">&larr; Back to Blogs</a>
+          <a href="/articles" className="inline-block font-mono text-[11px] tracking-widest uppercase text-gold/80 hover:text-gold transition mb-8">&larr; Back to Blogs</a>
 
           <span className="block font-mono text-[11px] tracking-widest uppercase text-muted mb-3">{post.kicker}</span>
           <h1 className="font-body italic font-semibold text-3xl sm:text-5xl text-cream leading-tight mb-6">{post.title}</h1>
@@ -80,7 +80,7 @@ export default async function BlogPage({ params }) {
         <Engagement type="blog" slug={slug} theme="dark" />
 
         <div className="pb-16">
-          <a href="/#blogs" className="inline-block font-mono text-xs tracking-widest uppercase border border-cream/20 text-cream px-6 py-3 rounded-sm hover:border-gold hover:text-gold transition">&larr; Back to all blogs</a>
+          <a href="/articles" className="inline-block font-mono text-xs tracking-widest uppercase border border-cream/20 text-cream px-6 py-3 rounded-sm hover:border-gold hover:text-gold transition">&larr; Back to all blogs</a>
         </div>
       </div>
     </main>

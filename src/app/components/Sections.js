@@ -11,7 +11,7 @@ export default async function Sections() {
   const doors = [
     {
       label: "Reviews",
-      href: "#reviews",
+      href: "/reviews",
       color: "#E2241A",
       live: reviews.length > 0,
       img: reviews[0] ? reviews[0].posterUrl : null,
@@ -21,7 +21,7 @@ export default async function Sections() {
     },
     {
       label: "Articles",
-      href: "#articles",
+      href: "/articles",
       color: "#E8B34C",
       live: !!lead,
       img: lead ? lead.img : null,

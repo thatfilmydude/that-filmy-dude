@@ -105,7 +105,7 @@ export default async function ReviewPage({ params }) {
     <main className="min-h-screen bg-backdrop">
       <div className="max-w-3xl mx-auto px-8 md:px-0">
         <div className="relative pt-10 pb-12">
-          <Link href="/#reviews" className="inline-block font-mono text-[11px] tracking-widest uppercase text-gold/80 hover:text-gold transition mb-8">&larr; Back to Reviews</Link>
+          <Link href="/reviews" className="inline-block font-mono text-[11px] tracking-widest uppercase text-gold/80 hover:text-gold transition mb-8">&larr; Back to Reviews</Link>
 
           <div className="flex flex-col sm:flex-row gap-8 items-start">
             {posterUrl ? (
@@ -149,7 +149,7 @@ export default async function ReviewPage({ params }) {
         <Engagement type="review" slug={slug} theme="dark" />
 
         <div className="pb-16">
-          <Link href="/#reviews" className="inline-block font-mono text-xs tracking-widest uppercase border border-cream/20 text-cream px-6 py-3 rounded-sm hover:border-gold hover:text-gold transition">&larr; Back to all reviews</Link>
+          <Link href="/reviews" className="inline-block font-mono text-xs tracking-widest uppercase border border-cream/20 text-cream px-6 py-3 rounded-sm hover:border-gold hover:text-gold transition">&larr; Back to all reviews</Link>
         </div>
       </div>
     </main>
