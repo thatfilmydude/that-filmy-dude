@@ -25,3 +25,10 @@ create index if not exists comments_post_idx on comments (post_type, slug, statu
 -- so lock them down for everyone else.
 alter table reactions enable row level security;
 alter table comments enable row level security;
+
+-- Email sign-ups from the ticket form on the homepage.
+create table if not exists subscribers (
+  email text primary key check (char_length(email) <= 200),
+  created_at timestamptz not null default now()
+);
+alter table subscribers enable row level security;
