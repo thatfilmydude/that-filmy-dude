@@ -7,8 +7,6 @@ import TicketForm from "./components/TicketForm";
 import Latest from "./components/Latest";
 import Reviews from "./components/Reviews";
 import Stories from "./components/Stories";
-import Blogs from "./components/Blogs";
-import Gallery from "./components/Gallery";
 import YoutubeFeed from "./components/YoutubeFeed";
 import InstagramFeed from "./components/InstagramFeed";
 import Footer from "./components/Footer";
@@ -37,12 +35,6 @@ export default function Home() {
       </Suspense>
       <Suspense fallback={<SectionSkeleton />}>
         <Stories />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton />}>
-        <Blogs />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton />}>
-        <Gallery />
       </Suspense>
       <Suspense fallback={<SectionSkeleton />}>
         <YoutubeFeed />

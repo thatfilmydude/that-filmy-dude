@@ -68,10 +68,10 @@ export default function HeroBooth() {
           <h1 className="font-display text-[clamp(4rem,9vw,8rem)] leading-[.9] text-cream mt-4">
             REEL TALK,<br /><span className="text-gold">NO FILTER</span>
           </h1>
-          <p className="mt-6 italic text-xl text-cream/80 max-w-[40ch] leading-snug">Reviews that do not kiss the poster. Galleries worth stopping to scroll. The film world, minus the PR spin.</p>
+          <p className="mt-6 italic text-xl text-cream/80 max-w-[40ch] leading-snug">Reviews that do not kiss the poster. Articles worth stopping for. The film world, minus the PR spin.</p>
           <div className="mt-8 flex gap-3 flex-wrap">
             <a href="#reviews" className="tfd-btn tfd-btn-r" data-mag>Latest reviews</a>
-            <a href="#gallery" className="tfd-btn tfd-btn-o" data-mag>Browse galleries</a>
+            <a href="#articles" className="tfd-btn tfd-btn-o" data-mag>Read articles</a>
           </div>
         </div>
 

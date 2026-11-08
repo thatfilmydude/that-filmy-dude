@@ -6,8 +6,6 @@ import Image from "next/image";
 const LINKS = [
   { href: "#reviews", label: "Reviews" },
   { href: "#articles", label: "Articles" },
-  { href: "#blogs", label: "Blogs" },
-  { href: "#gallery", label: "Galleries" },
 ];
 
 export default function HeaderClient({ items }) {
@@ -90,7 +88,7 @@ export default function HeaderClient({ items }) {
       {search ? (
         <div className="fixed inset-0 z-[160] bg-backdrop/95 backdrop-blur px-5 pt-[12vh]" role="dialog" aria-label="Search" onClick={function (e) { if (e.target === e.currentTarget) setSearch(false); }}>
           <div className="max-w-2xl mx-auto">
-            <input ref={input} value={q} onChange={function (e) { setQ(e.target.value); }} placeholder="Search reviews, articles and blogs" aria-label="Search" className="w-full rounded-2xl border-[1.5px] border-gold bg-surface px-5 py-4 text-xl text-cream placeholder-muted" />
+            <input ref={input} value={q} onChange={function (e) { setQ(e.target.value); }} placeholder="Search reviews and articles" aria-label="Search" className="w-full rounded-2xl border-[1.5px] border-gold bg-surface px-5 py-4 text-xl text-cream placeholder-muted" />
             <div className="mt-4 grid gap-2">
               {results.length === 0 ? <p className="font-mono text-xs tracking-widest uppercase text-muted text-center mt-4">No match yet</p> : null}
               {results.map(function (r) {
