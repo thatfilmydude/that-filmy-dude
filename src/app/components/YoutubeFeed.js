@@ -10,6 +10,17 @@ async function getVideos() {
   }
 }
 
+function decodeEntities(str) {
+  return String(str || "")
+    .replace(/&#(\d+);/g, function (m, n) { return String.fromCharCode(Number(n)); })
+    .replace(/&#x([0-9a-f]+);/gi, function (m, n) { return String.fromCharCode(parseInt(n, 16)); })
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&");
+}
+
 export default async function YoutubeFeed() {
   const videos = await getVideos();
   if (videos.length === 0) return null;
@@ -27,7 +38,7 @@ export default async function YoutubeFeed() {
         {videos.map(function (v, i) {
           const videoId = v.id.videoId;
           const thumb = v.snippet.thumbnails.high.url;
-          const title = v.snippet.title;
+          const title = decodeEntities(v.snippet.title);
           const watchUrl = "https://www.youtube.com/watch?v=" + videoId;
           return (
             <a key={i} href={watchUrl} target="_blank" rel="noopener noreferrer" className="group">
