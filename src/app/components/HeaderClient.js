@@ -56,11 +56,9 @@ export default function HeaderClient({ items }) {
     <>
       <div className="tfd-prog" aria-hidden="true"><i ref={prog} /></div>
       <header className={"tfd-nav" + (hide && !open ? " hide" : "") + (open ? " bg-backdrop" : "")}>
-        <div className="max-w-[1240px] mx-auto px-5 md:px-8 flex items-center gap-6 h-[76px]">
+        <div className="max-w-[1240px] mx-auto px-5 md:px-8 flex items-center gap-6 h-[84px]">
           <a href="#" className="flex items-center gap-3">
-            <span className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-gold/70">
-              <Image src="/logo.png" alt="That Filmy Dude" width={40} height={40} className="w-8 h-auto" />
-            </span>
+            <Image src="/logo-full.png" alt="That Filmy Dude" width={354} height={477} priority className="h-[66px] w-auto" />
             <span className="flex flex-col leading-none">
               <span className="font-display text-2xl tracking-wide text-cream">THAT FILMY DUDE</span>
               <span className="font-mono text-[9px] tracking-[0.24em] uppercase text-gold mt-1">Reel Talk · No Filter</span>
