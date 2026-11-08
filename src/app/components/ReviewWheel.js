@@ -43,10 +43,10 @@ export default function ReviewWheel({ reviews }) {
       <div className="max-w-[1240px] mx-auto px-5 md:px-8">
         <div className="flex justify-between items-end gap-4 flex-wrap">
           <div>
-            <span className="tfd-kick">Latest reviews</span>
-            <h2 className="tfd-h2 text-cream mt-3" style={{ fontSize: "clamp(2.8rem,6.4vw,5.6rem)" }}>SPIN THE WHEEL</h2>
+            <span className="tfd-kick">Browse by poster</span>
+            <h2 className="tfd-h2 text-cream mt-3" style={{ fontSize: "clamp(2.8rem,6.4vw,5.6rem)" }}>LATEST REVIEWS</h2>
           </div>
-          <p className="italic text-lg text-cream/80 max-w-[36ch]">Drag, use the arrows, or tap a poster. Open one for the quick verdict.</p>
+          <p className="italic text-lg text-cream/80 max-w-[36ch]">Drag the posters, use the arrows, or tap one to see its rating and verdict.</p>
         </div>
 
         <div ref={box} className="tfd-cf" tabIndex={0} aria-label="Review posters" data-cur="drag"
