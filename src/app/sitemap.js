@@ -14,7 +14,11 @@ export default async function sitemap() {
   const baseUrl = "https://www.thatfilmydude.net";
   const reviews = await fetchAll("reviews");
   const posts = await fetchAll("posts");
-  const staticPages = [{ url: baseUrl, lastModified: new Date(), changeFrequency: "daily", priority: 1 }];
+  const staticPages = [
+    { url: baseUrl, lastModified: new Date(), changeFrequency: "daily", priority: 1 },
+    { url: baseUrl + "/reviews", lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
+    { url: baseUrl + "/articles", lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
+  ];
   const reviewPages = reviews.filter(function (r) { return r.slug; }).map(function (r) {
     return { url: baseUrl + "/reviews/" + r.slug, lastModified: safeDate(r.updatedAt), changeFrequency: "weekly", priority: 0.8 };
   });
