@@ -2,33 +2,33 @@ import { getFeed } from "./feedUtils";
 import { getReviewList } from "./home/data";
 import Doors from "./Doors";
 
-async function firstGalleryImage() {
-  try {
-    const res = await fetch(process.env.STRAPI_URL + "/api/gallery-photos?populate=*&pagination[limit]=1&sort=publishedAt:desc", {
-      headers: { Authorization: "Bearer " + process.env.STRAPI_API_TOKEN },
-      next: { revalidate: 60 },
-    });
-    if (!res.ok) return null;
-    const json = await res.json();
-    const p = (json.data || [])[0];
-    const img = p && Array.isArray(p.image) ? p.image[0] : null;
-    if (!img || !img.url) return null;
-    return img.url.startsWith("http") ? img.url : process.env.STRAPI_URL + img.url;
-  } catch (e) {
-    return null;
-  }
-}
-
 export default async function Sections() {
-  const results = await Promise.all([getReviewList(1), getFeed(), firstGalleryImage()]);
-  const feed = results[1];
-  const article = feed.filter(function (i) { return i.kind === "post" && i.category !== "Blog" && i.img; })[0];
-  const blog = feed.filter(function (i) { return i.category === "Blog" && i.img; })[0];
+  const results = await Promise.all([getReviewList(3), getFeed()]);
+  const reviews = results[0];
+  const posts = results[1].filter(function (i) { return i.kind === "post"; });
+  const lead = posts.filter(function (i) { return i.img; })[0] || posts[0];
+
   const doors = [
-    { label: "Reviews", href: "#reviews", color: "#E2241A", img: results[0][0] ? results[0][0].posterUrl : null, desc: "A rating out of 5 and a verdict you can read in ten seconds." },
-    { label: "Articles", href: "#articles", color: "#E8B34C", img: article ? article.img : null, desc: "Lists, explainers and what to watch this month." },
-    { label: "Blogs", href: "#blogs", color: "#4f8fd6", img: blog ? blog.img : null, desc: "Longer takes, opinions and comparisons." },
-    { label: "Galleries", href: "#gallery", color: "#46a97a", img: results[2], desc: "Stills and shoots, by actor, actress and event." },
+    {
+      label: "Reviews",
+      href: "#reviews",
+      color: "#E2241A",
+      live: reviews.length > 0,
+      img: reviews[0] ? reviews[0].posterUrl : null,
+      title: reviews[0] ? reviews[0].title : "",
+      desc: "A rating out of 5 and a verdict you can read in ten seconds.",
+      also: reviews.slice(1, 3).map(function (r) { return { title: r.title, href: "/reviews/" + r.slug }; }),
+    },
+    {
+      label: "Articles",
+      href: "#articles",
+      color: "#E8B34C",
+      live: !!lead,
+      img: lead ? lead.img : null,
+      title: lead ? lead.title : "",
+      desc: "Lists, explainers, opinions and what to watch this month.",
+      also: posts.filter(function (i) { return i !== lead; }).slice(0, 2).map(function (i) { return { title: i.title, href: i.href }; }),
+    },
   ];
   return <Doors doors={doors} />;
 }

@@ -1,8 +1,6 @@
 const CREDITS = [
   ["Reviews", "Rated out of five, with a one line verdict"],
   ["Articles", "What to watch and where"],
-  ["Blogs", "Longer takes and opinions"],
-  ["Galleries", "Stills and shoots"],
   ["Shorts", "On YouTube"],
   ["Posts", "On Instagram"],
   ["Opinions", "Uncut"],
