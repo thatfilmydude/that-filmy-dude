@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { renderBlocks, YouTubeEmbed } from "../../components/BlockRenderer";
 import Engagement from "../../components/Engagement";
 
@@ -38,6 +39,7 @@ export async function generateMetadata({ params }) {
 
   return {
     title: post.title + " - That Filmy Dude",
+    alternates: { canonical: (post.category === "Blog" ? "/blogs/" : "/articles/") + slug },
     description: post.excerpt,
     openGraph: {
       title: post.title,
@@ -65,7 +67,7 @@ export default async function ArticlePage({ params }) {
     <main className="min-h-screen bg-paper">
       <div className="max-w-3xl mx-auto px-8 md:px-0">
         <div className="pt-10 pb-8">
-          <a href="/articles" className="inline-block font-mono text-[11px] tracking-widest uppercase text-branddark/80 hover:text-branddark transition mb-8">&larr; Back to Articles</a>
+          <Link href="/articles" className="inline-block font-mono text-[11px] tracking-widest uppercase text-branddark/80 hover:text-branddark transition mb-8">&larr; Back to Articles</Link>
 
           {coverUrl ? (
             <img src={coverUrl} alt={post.title} className="w-full aspect-video object-cover rounded-lg border border-black/10 mb-8" />
@@ -86,7 +88,7 @@ export default async function ArticlePage({ params }) {
         <Engagement type="article" slug={slug} theme="light" />
 
         <div className="pb-16">
-          <a href="/articles" className="inline-block font-mono text-xs tracking-widest uppercase border border-black/20 text-[#1C1416] px-6 py-3 rounded-sm hover:border-branddark hover:text-branddark transition">&larr; Back to all articles</a>
+          <Link href="/articles" className="inline-block font-mono text-xs tracking-widest uppercase border border-black/20 text-[#1C1416] px-6 py-3 rounded-sm hover:border-branddark hover:text-branddark transition">&larr; Back to all articles</Link>
         </div>
       </div>
     </main>

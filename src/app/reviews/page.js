@@ -5,6 +5,7 @@ import { mediaUrl, formatDate, pubTime } from "../components/feedUtils";
 
 export const metadata = {
   title: "All Reviews - That Filmy Dude",
+  alternates: { canonical: "/reviews" },
   description: "Every movie review on That Filmy Dude, with a rating out of 5 and a verdict you can read in ten seconds.",
 };
 

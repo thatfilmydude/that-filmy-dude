@@ -12,6 +12,10 @@ import InstagramFeed from "./components/InstagramFeed";
 import Footer from "./components/Footer";
 import SectionSkeleton from "./components/SectionSkeleton";
 
+export const metadata = {
+  alternates: { canonical: "/" },
+};
+
 export default function Home() {
   return (
     <>

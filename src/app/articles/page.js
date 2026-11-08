@@ -5,6 +5,7 @@ import { mediaUrl, formatDate, pubTime } from "../components/feedUtils";
 
 export const metadata = {
   title: "All Articles - That Filmy Dude",
+  alternates: { canonical: "/articles" },
   description: "Lists, explainers, opinions and what to watch, from That Filmy Dude.",
 };
 

@@ -22,6 +22,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
+  metadataBase: new URL("https://www.thatfilmydude.net"),
   title: "That Filmy Dude",
   description: "Reviews that do not kiss the poster.",
   verification: {
